@@ -79,7 +79,7 @@ public class CategoriaActivity extends Activity implements AdapterView.OnItemSel
     public String palabraOculta( CharSequence [] array_especifico){
         String palabra = null;
 
-            int aleatoria = (int) (Math.random() * (array_especifico.length +1));
+            int aleatoria = (int) (Math.random() * (array_especifico.length));
             Log.d("MENSAJE", aleatoria + "");
             palabra = array_especifico[aleatoria].toString();
 

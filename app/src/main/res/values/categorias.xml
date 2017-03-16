@@ -16,7 +16,7 @@
     </array>
 
     <string-array name="categorias">
-        <item>Elige una categoría</item>
+        <item>Selecciona una categoria</item>
         <item>Animales</item>
         <item>Deportes</item>
         <item>Eñe palabras</item>
@@ -39,7 +39,6 @@
         <item>okapi</item>
 
     </string-array>
-
     <string-array name="deportes">
         <item>tenis de mesa</item>
         <item>baloncesto</item>
