@@ -15,9 +15,11 @@ import android.widget.TextView;
 
 public class TableroActivity extends AppCompatActivity {
 
-    private String palabra;
+    private String palabra,palabraAux;
     private int[] array_pics = {R.drawable.ic_cuerda, R.drawable.ic_cabeza, R.drawable.ic_cuerpo, R.drawable.ic_brazo, R.drawable.ic_brazos, R.drawable.ic_pierna};
     private static int contador;
+    private static int tamaño_palabra;
+    private static int contador_palabra_verdadero;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,6 +29,11 @@ public class TableroActivity extends AppCompatActivity {
         contador = 0;
 
         palabra = getIntent().getStringExtra("palabra_clave");
+        palabraAux = palabra;
+
+        palabraAux.replace(" ","");
+
+        tamaño_palabra = obtenerTamañoPalabra(palabraAux);
 
         ImageView imageView = (ImageView) findViewById(R.id.imagenes_ahorcado);
         imageView.setImageResource(array_pics[contador]);
@@ -54,6 +61,18 @@ public class TableroActivity extends AppCompatActivity {
         if(encontrada)
         {
             btnPulsado.setTextColor(Color.rgb(34, 153, 84));
+
+            Log.d("MENSAJE",contador_palabra_verdadero+" contador");
+            Log.d("MENSAJE",tamaño_palabra+" tamaño");
+
+            if(contador_palabra_verdadero == tamaño_palabra)
+            {
+                Intent intent = new Intent(TableroActivity.this, VictoriaActivity.class);
+
+                intent.putExtra("palabra_clave",palabra);
+
+                startActivity(intent);
+            }
         }
         else
         {
@@ -64,12 +83,17 @@ public class TableroActivity extends AppCompatActivity {
             {
                 Intent intent = new Intent(TableroActivity.this, DerrotaActivity.class);
 
+                intent.putExtra("palabra_clave",palabra);
+
                 startActivity(intent);
             }
             else
             {
+
                 ImageView imageView = (ImageView) findViewById(R.id.imagenes_ahorcado);
                 imageView.setImageResource(array_pics[contador]);
+
+
             }
         }
 
@@ -80,8 +104,10 @@ public class TableroActivity extends AppCompatActivity {
         boolean encontrado = false;
         char letrita= letra.charAt(0);
         for(int i=0; i<palabra.length(); i++){
-            if(letrita == palabra.charAt(i)){
+            if(letrita == palabra.charAt(i))
+            {
                 encontrado=true;
+                contador_palabra_verdadero++;
             }
         }
 
@@ -90,6 +116,17 @@ public class TableroActivity extends AppCompatActivity {
 
     public String getPalabra(){
         return palabra;
+    }
+
+    public int obtenerTamañoPalabra(String palabra){
+        int contador = 0;
+
+        for(int i = 0;i<palabra.length();i++)
+        {
+            contador++;
+        }
+
+        return contador;
     }
 }
 
