@@ -3,9 +3,8 @@
 
     <!-- Each position of id refers to an string array -->
     <array name="array_categorias">
-
+        <item></item>
         <item>@array/animales</item>
-        <item>@array/categorias</item>
         <item>@array/deportes</item>
         <item>@array/eñe_palabras</item>
         <item>@array/famosos</item>

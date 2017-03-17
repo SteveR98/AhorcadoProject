@@ -1,27 +1,15 @@
 package antonio.femxa.ahorcadoproject;
 
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.content.res.TypedArray;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.ArraySet;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.ImageView;
-import android.widget.ListView;
 import android.widget.Spinner;
-import android.widget.Toast;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 
 public class CategoriaActivity extends Activity implements AdapterView.OnItemSelectedListener {
 
@@ -35,9 +23,11 @@ public class CategoriaActivity extends Activity implements AdapterView.OnItemSel
 
         loadSpinnerCategorias();
 
-
     }
 
+    /**
+     * Cargamos el spinner con el array que esta en categorias.xml
+     */
     public void loadSpinnerCategorias() {
 
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this, R.array.categorias, android.R.layout.simple_spinner_item);
@@ -49,6 +39,15 @@ public class CategoriaActivity extends Activity implements AdapterView.OnItemSel
         this.spCategorias.setOnItemSelectedListener(this);
     }
 
+    /**
+     * Cada vez que se cambie el spinner y no sea la posicion 0(selecciona una categoria) carga
+     * el array conrrespondiente de esa categoria, obtiene un string aleatorio de ella
+     * y se redirige a activity_tablero con el string conseguido
+     * @param parent
+     * @param view
+     * @param pos La posicion del array de categorias
+     * @param id
+     */
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int pos, long id) {
 
@@ -75,7 +74,11 @@ public class CategoriaActivity extends Activity implements AdapterView.OnItemSel
 
     }
 
-
+    /**
+     * Dado un array de strings te devuelve un string aleatorio de ese array
+     * @param array_especifico
+     * @return
+     */
     public String palabraOculta( CharSequence [] array_especifico){
         String palabra = null;
 

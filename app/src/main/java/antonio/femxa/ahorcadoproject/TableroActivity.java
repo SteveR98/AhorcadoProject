@@ -3,10 +3,7 @@ package antonio.femxa.ahorcadoproject;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -19,14 +16,15 @@ public class TableroActivity extends AppCompatActivity {
     private int[] array_pics = {R.drawable.ic_cuerda, R.drawable.ic_cabeza, R.drawable.ic_cuerpo, R.drawable.ic_brazo, R.drawable.ic_brazos, R.drawable.ic_pierna};
     private static int contador;
     private static int tamaño_palabra;
-    private static int contador_palabra_verdadero;
-
+    private static int contador_aciertos;
+    
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_tablero);
 
         contador = 0;
+        contador_aciertos = 0;
 
         palabra = getIntent().getStringExtra("palabra_clave");
         palabraAux = palabra;
@@ -60,46 +58,70 @@ public class TableroActivity extends AppCompatActivity {
         boolean encontrada=buscarLetra(pulsado, palabra);
         if(encontrada)
         {
-            btnPulsado.setTextColor(Color.rgb(34, 153, 84));
-
-            Log.d("MENSAJE",contador_palabra_verdadero+" contador");
-            Log.d("MENSAJE",tamaño_palabra+" tamaño");
-
-            if(contador_palabra_verdadero == tamaño_palabra)
-            {
-                Intent intent = new Intent(TableroActivity.this, VictoriaActivity.class);
-
-                intent.putExtra("palabra_clave",palabra);
-
-                startActivity(intent);
-            }
+            letraAcertada(btnPulsado);
         }
         else
         {
-            btnPulsado.setTextColor(Color.RED);
-            btnPulsado.setEnabled(false);
-            contador++;
-            if(contador == 6)
-            {
-                Intent intent = new Intent(TableroActivity.this, DerrotaActivity.class);
-
-                intent.putExtra("palabra_clave",palabra);
-
-                startActivity(intent);
-            }
-            else
-            {
-
-                ImageView imageView = (ImageView) findViewById(R.id.imagenes_ahorcado);
-                imageView.setImageResource(array_pics[contador]);
-
-
-            }
+            letraFallada(btnPulsado);
         }
 
 
     }
 
+    /**
+     * Se cambia a verde el boton introducido y si el contador_aciertos es igual al tamaño de la palabra oculta
+     * se redirige a VictoriaActivity
+     * @param button
+     */
+    public void letraAcertada(Button button){
+
+        button.setTextColor(Color.rgb(34, 153, 84));
+
+        Log.d("MENSAJE",contador_aciertos+" contador");
+        Log.d("MENSAJE",tamaño_palabra+" tamaño");
+
+        if(contador_aciertos == tamaño_palabra)
+        {
+            Intent intent = new Intent(TableroActivity.this, VictoriaActivity.class);
+
+            intent.putExtra("palabra_clave",palabra);
+
+            startActivity(intent);
+        }
+    }
+
+    /**
+     * Cambia el color a rojo e inutiliza el boton introducido, si el contador de fallos
+     * es igual a 6 se redirige a DerrotaActivity, si no, cambia la imagen del ahoracado
+     * @param button
+     */
+    public void letraFallada(Button button){
+        button.setTextColor(Color.RED);
+        button.setEnabled(false);
+        contador++;
+
+        if(contador == 6)
+        {
+            Intent intent = new Intent(TableroActivity.this, DerrotaActivity.class);
+
+            intent.putExtra("palabra_clave",palabra);
+
+            startActivity(intent);
+        }
+        else
+        {
+            ImageView imageView = (ImageView) findViewById(R.id.imagenes_ahorcado);
+            imageView.setImageResource(array_pics[contador]);
+        }
+    }
+
+    /**
+     * Busca en una palabra una letra introducidas, cada vez que encuentre esa letra en la
+     * palabra se añade mas uno al contador_palabra_verdadero y devuelve un true
+     * @param letra
+     * @param palabra
+     * @return
+     */
     public boolean  buscarLetra(String letra, String palabra){
         boolean encontrado = false;
         char letrita= letra.charAt(0);
@@ -107,7 +129,7 @@ public class TableroActivity extends AppCompatActivity {
             if(letrita == palabra.charAt(i))
             {
                 encontrado=true;
-                contador_palabra_verdadero++;
+                contador_aciertos++;
             }
         }
 
@@ -118,8 +140,15 @@ public class TableroActivity extends AppCompatActivity {
         return palabra;
     }
 
+    /**
+     * Dada una palabra introducida te dice su numero de letras, no cuenta los espacios
+     * @param palabra
+     * @return numero de posiciones de esa palabra
+     */
     public int obtenerTamañoPalabra(String palabra){
         int contador = 0;
+
+        palabra = palabra.replace(" ","");
 
         for(int i = 0;i<palabra.length();i++)
         {
